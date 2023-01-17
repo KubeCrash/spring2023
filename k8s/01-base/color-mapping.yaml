@@ -5,7 +5,7 @@ metadata:
   name: color-mapping
   namespace: faces
 spec:
-  hostname: "*"
+  hostname: "demo.cluster.local"
   prefix: /color/
   service: color.faces
   timeout_ms: 0

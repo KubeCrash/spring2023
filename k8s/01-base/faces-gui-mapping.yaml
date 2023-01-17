@@ -5,7 +5,7 @@ metadata:
   name: gui-mapping
   namespace: faces
 spec:
-  hostname: "*"
+  hostname: "demo.cluster.local"
   prefix: /faces/
   service: faces-gui.faces
   rewrite: /

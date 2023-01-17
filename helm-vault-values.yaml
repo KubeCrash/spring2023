@@ -1,0 +1,14 @@
+server:
+  affinity: ""
+  service:
+    type: LoadBalancer
+    active:
+      enabled: false
+    standby:
+      enabled: false
+  ha:
+    enabled: true
+    raft:
+      enabled: true
+ui:
+  enabled: true

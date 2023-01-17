@@ -3,6 +3,7 @@ apiVersion: getambassador.io/v3alpha1
 kind: Listener
 metadata:
   name: ambassador-https-listener
+  namespace: emissary
 spec:
   port: 8443
   protocol: HTTPS
@@ -15,6 +16,7 @@ apiVersion: getambassador.io/v3alpha1
 kind: Listener
 metadata:
   name: ambassador-http-listener
+  namespace: emissary
 spec:
   port: 8080
   protocol: HTTP
@@ -27,8 +29,8 @@ apiVersion: getambassador.io/v3alpha1
 kind: Host
 metadata:
   name: wildcard-host
+  namespace: emissary
 spec:
-  hostname: "*"
-  requestPolicy:
-    insecure:
-      action: Route
+  hostname: "demo.cluster.local"
+  tlsSecret:
+    name: emissary-certs

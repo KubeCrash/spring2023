@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 cdiff() {
 	diff -U 9999 "$1" "$2" | ./diffc
 }
