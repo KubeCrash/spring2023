@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+#
 kubectl apply -f k8s/01-base/color-mapping.yaml
 kubectl apply -f k8s/01-base/color-profile.yaml
 kubectl apply -f k8s/01-base/smiley-mapping.yaml

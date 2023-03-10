@@ -1,0 +1,14 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: emissary-certs
+  namespace: emissary
+spec:
+  secretName: emissary-certs
+  issuerRef:
+    name: vault-apps-clusterissuer
+    kind: ClusterIssuer
+  commonName: 'demo.cluster.local'
+  dnsNames:
+  - 'demo.cluster.local'

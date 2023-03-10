@@ -1,1 +1,3 @@
 oci
+/vault-yaml/vault-clusterissuer.yaml
+/vault-server-tls-ca.crt

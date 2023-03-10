@@ -5,7 +5,7 @@ metadata:
   name: face-mapping
   namespace: faces
 spec:
-  hostname: "*"
+  hostname: "demo.cluster.local"
   prefix: /face/
   service: face.faces
   timeout_ms: 250

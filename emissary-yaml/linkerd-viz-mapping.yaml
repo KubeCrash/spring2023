@@ -3,9 +3,10 @@ apiVersion: getambassador.io/v3alpha1
 kind: Mapping
 metadata:
   name: viz-example-mapping
+  namespace: linkerd-viz
 spec:
   prefix: /
-  hostname: "*"
+  hostname: "demo.cluster.local"
   service: web.linkerd-viz.svc.cluster.local:8084
   host_rewrite: web.linkerd-viz.svc.cluster.local:8084
   remove_request_headers:
