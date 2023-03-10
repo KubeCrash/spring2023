@@ -35,7 +35,8 @@ k3d cluster delete $CLUSTER &>/dev/null
 # Also, don't install traefik, since we'll be putting Linkerd on instead.
 k3d cluster create $CLUSTER \
     -p "80:80@loadbalancer" -p "443:443@loadbalancer" -p"8200:8200@loadbalancer" \
-    --k3s-arg '--no-deploy=traefik@server:*;agents:*'
+    --k3s-arg '--disable=traefik,metrics-server@server:*;agents:*' \
+    --k3s-arg '--disable-helm-controller@server:*;agents:*'
 
 #@wait
 #@HIDE

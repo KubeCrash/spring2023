@@ -10,9 +10,8 @@ In here you will find:
 
 - `create-cluster.sh`, a shell script to create a `k3d` cluster and prep it by
   running `setup-cluster.sh`.
-- `vault/install-vault.sh`, a shell script to install a vault cluster and initialize it
-- `vault/configure-vault-and-cert-manager.sh`, a shell script to configure vault for kubernetes auth and PKI for linkerd. Also installs cert-manager to manage the linkerd trust anchor.
-- `vault/unsseal-vault.sh`, a helper script that will unseal a previously initialized vault that has restarted and been sealed
+- `vault/install-cert-manager-and-vault.sh`, a shell script to install a vault cluster and initialize it
+- `vault/configure-cert-manager-and-vault.sh`, a shell script to configure vault for kubernetes auth and PKI for linkerd. Also installs cert-manager to manage the linkerd trust anchor.
 - `setup-cluster.sh`, a shell script to set up an empty cluster with [Linkerd],
   [Emissary-ingress], and the Faces app.
    - These things are installed in a demo configuration: read and think
@@ -48,11 +47,8 @@ In here you will find:
   Save it to a file with `curl localhost:8200/v1/pki/ca > ~/tmp/ca.pem`
 
 - Play around!! Assuming that you're using k3d, the Faces app is reachable at
-  http://localhost/faces/ and the Linkerd Viz dashboard is available at
-  http://localhost/
-
-   - If you're not using k3d, instead of `localhost` use the IP or DNS name of
-     the `emissary-ingress` service in the `emissary` namespace.
+  https://demo.cluster.local/faces/ and the Linkerd Viz dashboard is available at
+  https://demo.cluster.local/
 
 - To run the demo as we've given it before, check out [DEMO.md]. The easiest
   way to use that is to run it with [demosh].
@@ -62,7 +58,7 @@ In here you will find:
 [DEMO.md]: DEMO.md
 [demosh]: https://github.com/BuoyantIO/demosh
 [Polaris]: https://polaris.docs.fairwinds.com
-[Cert Manager]: https://cert-manager.io
+[cert-manager]: https://cert-manager.io
 ---
 
 #### DEMO HOOKS

@@ -1,14 +1,55 @@
+global:
+  tlsDisable: false
+
+injector:
+  enabled: false
+
 server:
-  affinity: ""
-  service:
-    type: LoadBalancer
-    active:
-      enabled: false
-    standby:
-      enabled: false
-  ha:
+  authDelegator:
     enabled: true
-    raft:
-      enabled: true
+
+  dataStorage:
+    enabled: false
+
+  standalone:
+    enabled: true
+    config: |
+      listener "tcp" {
+        address = "[::]:8200"
+        cluster_address = "[::]:8201"
+        tls_disable = false
+        tls_cert_file = "/vault/tls/tls.crt"
+        tls_key_file = "/vault/tls/tls.key"
+      }
+
+      log_level = "Debug"
+
+  extraArgs: "-dev -dev-listen-address=[::]:8202 -log-level=debug"
+
+  extraEnvironmentVars:
+    VAULT_DEV_ROOT_TOKEN_ID: vault-root-token
+
+  volumes:
+    - name: vault-tls
+      secret:
+        defaultMode: 420
+        secretName: vault-server-tls
+
+  volumeMounts:
+    - mountPath: /vault/tls
+      name: vault-tls
+      readOnly: true
+  
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
 ui:
   enabled: true
+  serviceType: ClusterIP
+  serviceNodePort: null

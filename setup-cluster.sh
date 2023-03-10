@@ -27,8 +27,8 @@ kubectl config set-context --current --namespace=default
 #@SHOW
 
 #### VAULT_CERT_MANAGER_INSTALL_START
-bash install-vault.sh
-bash configure-vault-and-cert-manager.sh
+bash install-cert-manager-and-vault.sh
+bash configure-cert-manager-and-vault.sh
 #### VAULT_CERT_MANAGER_INSTALL_END
 
 #@clear
