@@ -1,0 +1,62 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: example-auth
+  namespace: emissary
+spec:
+  type: ClusterIP
+  selector:
+    app: example-auth
+  ports:
+    - port: 3000
+      name: http-example-auth
+      targetPort: http-api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-auth
+  namespace: emissary
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: example-auth
+  template:
+    metadata:
+      labels:
+        app: example-auth
+    spec:
+      containers:
+        - name: example-auth
+          image: thedevelopnik/ambassador-auth-service:1.1.1
+          imagePullPolicy: Always
+          ports:
+            - name: http-api
+              containerPort: 3000
+          resources:
+            limits:
+              cpu: "0.1"
+              memory: 100Mi
+          startupProbe:
+            httpGet:
+              path: /
+              port: http-api
+            failureThreshold: 30
+            periodSeconds: 10
+---
+apiVersion: getambassador.io/v3alpha1
+kind: AuthService
+metadata:
+  name: authentication
+  namespace: emissary
+spec:
+  auth_service: "example-auth:3000"
+  path_prefix: "/extauth"
+  allowed_request_headers:
+    - "x-faces-session"
+  allowed_authorization_headers:
+    - "x-faces-session"
