@@ -1,0 +1,93 @@
+# This file shows examples of cert-manager resources to get a
+# cert from Let's Encrypt using the DNS01 solver, with Cloudflare
+# as the DNS management vendor. cert-manager supports several other
+# vendors, as well as webhooks and a generic ACMEDNS server, you can see
+# all of them, with instructions for use, at https://cert-manager.io/docs/configuration/acme/dns01/
+
+# create a secret for cert-manager to use to authenticate with
+# the DNS management vendor
+#---
+#apiVersion: v1
+#kind: Secret
+#metadata:
+#  name: cloudflare-api-token
+#  namespace: cert-manager
+#stringData:
+#  api-token: <a Cloudflare API token>
+
+# Create staging and production ClusterIssuers. With Let's Encrypt
+# it is critical to test your configuration against their staging server
+# first, as it is easy to go over the production rate limit with a
+# failing configuration and be stuck.
+#---
+#apiVersion: cert-manager.io/v1
+#kind: ClusterIssuer
+#metadata:
+#  name: letsencrypt-staging
+#  namespace: cert-manager
+#spec:
+#  acme:
+#    email: "dev@company.com"
+#    server: "https://acme-staging-v02.api.letsencrypt.org/directory"
+#    privateKeySecretRef:
+#      name: le-staging-issuer-account-key
+#    solvers:
+#      - dns01:
+#          cloudflare:
+#            apiTokenSecretRef:
+#              name: cloudflare-api-token
+#              key: api-token
+#---
+#apiVersion: cert-manager.io/v1
+#kind: ClusterIssuer
+#metadata:
+#  name: letsencrypt-production
+#  namespace: cert-manager
+#spec:
+#  acme:
+#    email: "dev@company.com"
+#    server: "https://acme-v02.api.letsencrypt.org/directory"
+#    privateKeySecretRef:
+#      name: le-production-issuer-account-key
+#    solvers:
+#    - dns01:
+#        cloudflare:
+#          apiTokenSecretRef:
+#            name: cloudflare-api-token
+#            key: api-token
+
+# Create a staging certificate to test the configuration before
+# attempting to create a production certificate.
+#---
+#apiVersion: cert-manager.io/v1
+#kind: Certificate
+#metadata:
+#  name: demo-staging
+#  namespace: emissary
+#spec:
+#  secretName: demo-mycompany-com-staging
+#  duration: 2160h
+#  renewBefore: 360h
+#  dnsNames:
+#  - demo.mycompany.com
+#  issuerRef:
+#    name: letsencrypt-staging
+#    kind: ClusterIssuer
+
+# Once the staging certificate is successfully created, we can
+# create a production one for use with the Emissary-Ingress host.
+#---
+#apiVersion: cert-manager.io/v1
+#kind: Certificate
+#metadata:
+#  name: demo
+#  namespace: emissary
+#spec:
+#  secretName: demo-mycompany-com
+#  duration: 2160h
+#  renewBefore: 360h
+#  dnsNames:
+#    - demo.mycompany.com
+#  issuerRef:
+#    name: letsencrypt-production
+#    kind: ClusterIssuer

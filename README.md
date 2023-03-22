@@ -50,6 +50,10 @@ In here you will find:
   https://demo.cluster.local/faces/ and the Linkerd Viz dashboard is available at
   https://demo.cluster.local/
 
+   - To login using basic auth, use the credentials `username` and `password`
+
+   - To remove the need for authentication run `$ kubectl delete authservice -n emissary authentication`
+
 - To run the demo as we've given it before, check out [DEMO.md]. The easiest
   way to use that is to run it with [demosh].
 
@@ -65,3 +69,10 @@ In here you will find:
 
 There are many `#@` comments in the shell scripts; those are hooks to be
 interpreted by external software. You can safely ignore them for now.
+
+#### Certificates
+For maximum flexibility of running locally or in an ephemeral environment
+this demo uses self-signed certificates. For reference on how you could create
+real certificates in a production environment, view our [example](./cert-manager-yaml/production-cert-example)
+which uses a DNS01 solver to get a certificate from Let's Encrypt for your domain.
+
