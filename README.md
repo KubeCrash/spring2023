@@ -74,5 +74,5 @@ interpreted by external software. You can safely ignore them for now.
 For maximum flexibility of running locally or in an ephemeral environment
 this demo uses self-signed certificates. For reference on how you could create
 real certificates in a production environment, view our [example](./cert-manager-yaml/production-cert-example)
-which uses a DNS01 solver to get a certificate from Let's Encrypt for your domain.
+which uses a HTTP01 solver to get a certificate from Let's Encrypt for your domain.
 

@@ -1,19 +1,5 @@
 # This file shows examples of cert-manager resources to get a
-# cert from Let's Encrypt using the DNS01 solver, with Cloudflare
-# as the DNS management vendor. cert-manager supports several other
-# vendors, as well as webhooks and a generic ACMEDNS server, you can see
-# all of them, with instructions for use, at https://cert-manager.io/docs/configuration/acme/dns01/
-
-# create a secret for cert-manager to use to authenticate with
-# the DNS management vendor
-#---
-#apiVersion: v1
-#kind: Secret
-#metadata:
-#  name: cloudflare-api-token
-#  namespace: cert-manager
-#stringData:
-#  api-token: <a Cloudflare API token>
+# cert from Let's Encrypt using the HTTP01 solver.
 
 # Create staging and production ClusterIssuers. With Let's Encrypt
 # it is critical to test your configuration against their staging server
@@ -32,11 +18,9 @@
 #    privateKeySecretRef:
 #      name: le-staging-issuer-account-key
 #    solvers:
-#      - dns01:
-#          cloudflare:
-#            apiTokenSecretRef:
-#              name: cloudflare-api-token
-#              key: api-token
+#      - http01:
+#          ingress:
+#            class: 'nginx'
 #---
 #apiVersion: cert-manager.io/v1
 #kind: ClusterIssuer
@@ -50,11 +34,36 @@
 #    privateKeySecretRef:
 #      name: le-production-issuer-account-key
 #    solvers:
-#    - dns01:
-#        cloudflare:
-#          apiTokenSecretRef:
-#            name: cloudflare-api-token
-#            key: api-token
+#      - http01:
+#          ingress:
+#            class: 'nginx'
+
+# Service and Mapping to allow LE requests to reach cert-manager solver pods
+# This method requires that Emissary has a Host for this domain
+# and the domain points to Emissary's public IP address.
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: acme-challenge-service
+#  namespace: emissary
+#spec:
+#  ports:
+#    - port: 80
+#      targetPort: 8089
+#  selector:
+#    acme.cert-manager.io/http01-solver: 'true'
+#---
+#apiVersion: getambassador.io/v3alpha1
+#kind: Mapping
+#metadata:
+#  name: acme-challenge-mapping
+#  namespace: emissary
+#spec:
+#  hostname: '*'
+#  prefix: /.well-known/acme-challenge/
+#  rewrite: ''
+#  service: acme-challenge-service.faces
 
 # Create a staging certificate to test the configuration before
 # attempting to create a production certificate.
@@ -62,10 +71,10 @@
 #apiVersion: cert-manager.io/v1
 #kind: Certificate
 #metadata:
-#  name: demo-staging
+#  name: faces-staging
 #  namespace: emissary
 #spec:
-#  secretName: demo-mycompany-com-staging
+#  secretName: faces-mycompany-com-staging
 #  duration: 2160h
 #  renewBefore: 360h
 #  dnsNames:
