@@ -37,7 +37,7 @@ bash configure-cert-manager-and-vault.sh
 if ! command -v linkerd &> /dev/null
 then
     echo "linkerd could not be found. Installing it ..."
-    curl --proto '=https' --tlsv1.2 -sSfL https://run.linkerd.io/install | sh
+    curl --proto '=https' --tlsv1.2 -sSfL https://run.linkerd.io/install-edge | sh
 else
     echo "linkerd is installed"
     linkerd version
