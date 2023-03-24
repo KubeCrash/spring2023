@@ -73,15 +73,14 @@ kubectl create namespace emissary && \
 curl --proto '=https' --tlsv1.2 -sSfL $EMISSARY_CRDS | \
     sed -e 's/replicas: 3/replicas: 1/' | \
     kubectl apply -f -
-kubectl wait --timeout=90s --for=condition=available deployment emissary-apiext -n emissary-system --timeout=10m
+kubectl wait --timeout=90s --for=condition=available deployment emissary-apiext -n emissary-system
 
 curl --proto '=https' --tlsv1.2 -sSfL $EMISSARY_INGRESS | \
     sed -e 's/replicas: 3/replicas: 1/' | \
     linkerd inject - | \
     kubectl apply -f -
 
-kubectl -n emissary wait --for condition=available --timeout=90s deploy -lproduct=aes --timeout=10m
-kubectl -n emissary-system wait --for=condition=Ready pod -l app.kubernetes.io/instance=emissary-apiext --timeout=10m
+kubectl -n emissary wait --for condition=available --timeout=90s deploy -lproduct=aes
 #### EMISSARY_INSTALL_END
 
 #@wait
@@ -103,5 +102,5 @@ kubectl apply -f cert-manager-yaml
 kubectl create ns faces
 
 linkerd inject k8s/01-base | kubectl apply -f -
-kubectl -n faces wait --for=condition=Ready pod -l linkerd.io/workload-ns=faces --timeout=10m
+kubectl -n faces wait --for condition=available --timeout=90s deploy --all
 #### FACES_INSTALL_END
