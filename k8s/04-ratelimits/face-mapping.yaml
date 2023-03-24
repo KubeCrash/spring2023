@@ -5,7 +5,7 @@ metadata:
   name: face-mapping
   namespace: faces
 spec:
-  hostname: "demo.cluster.local"
+  hostname: "*"
   prefix: /face/
   service: face.faces
   timeout_ms: 250
@@ -18,4 +18,4 @@ spec:
       - x-emissary-test-allow:
         generic_key:
           key: mykey
-          value: myvalue  
+          value: myvalue

@@ -5,7 +5,7 @@ metadata:
   name: smiley-mapping
   namespace: faces
 spec:
-  hostname: "demo.cluster.local"
+  hostname: "*"
   prefix: /smiley/
   service: smiley.faces
   timeout_ms: 0

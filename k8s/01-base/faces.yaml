@@ -1,5 +1,17 @@
 ---
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    # app.kubernetes.io/instance: emissary-ingress
+    # app.kubernetes.io/managed-by: getambassador.io
+    # app.kubernetes.io/name: emissary-ingress
+    # app.kubernetes.io/part-of: emissary-ingress
+    service: face
+  name: face
+  namespace: faces
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: face
@@ -27,6 +39,7 @@ spec:
       labels:
         service: face
     spec:
+      serviceAccountName: face
       containers:
       - name: face
         image: dwflynn/faces-service:0.6.1
@@ -37,8 +50,10 @@ spec:
         env:
         - name: FACES_SERVICE
           value: "face"
-        - name: ERROR_FRACTION
-          value: "20"
+        # We're setting MAX_RATE so that the /rl path works, but we're setting
+        # it very high so that it won't actually have any effect.
+        - name: MAX_RATE
+          value: "32.0"
         # - name: DELAY_BUCKETS
         #   value: "0,5,10,15,20,50,200,500,1500"
         resources:
@@ -87,8 +102,6 @@ spec:
         env:
         - name: FACES_SERVICE
           value: "smiley"
-        - name: ERROR_FRACTION
-          value: "20"
         - name: DELAY_BUCKETS
           value: "0,5,10,15,20,50,200,500,1500"
         resources:
@@ -137,8 +150,6 @@ spec:
         env:
         - name: FACES_SERVICE
           value: "color"
-        - name: ERROR_FRACTION
-          value: "20"
         - name: DELAY_BUCKETS
           value: "0,5,10,15,20,50,200,500,1500"
         resources:
