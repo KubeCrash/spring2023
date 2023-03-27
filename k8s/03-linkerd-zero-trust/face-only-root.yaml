@@ -1,0 +1,21 @@
+---
+apiVersion: policy.linkerd.io/v1beta2
+kind: HTTPRoute
+metadata:
+  name: face-only-root
+  namespace: faces
+spec:
+  parentRefs:
+    - name: face
+      kind: Service
+      group: core
+      port: 80
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /cell/
+      backendRefs:
+        - name: face
+          port: 80
+          weight: 100

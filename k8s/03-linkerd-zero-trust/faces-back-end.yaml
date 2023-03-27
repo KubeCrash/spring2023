@@ -1,0 +1,20 @@
+---
+apiVersion: policy.linkerd.io/v1beta1
+kind: Server
+metadata:
+  namespace: faces
+  name: faces-back-end
+  labels:
+    app: faces-back-end
+    app.kubernetes.io/part-of: faces
+    project: faces
+spec:
+  podSelector:
+    matchExpressions:
+    - key: service
+      operator: In
+      values:
+        - color
+        - smiley
+  port: http
+  proxyProtocol: HTTP/1

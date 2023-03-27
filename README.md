@@ -101,13 +101,14 @@ with the Linkerd Viz dashboard at `https://$DEMO_HOST/`.
 
    ```
    kubectl delete ns faces
+   kubectl create ns faces
    linkerd inject k8s/02-faces | kubectl apply -f -
    kubectl -n faces wait --for condition=available --timeout=90s deploy --all
    ```
 
 [Linkerd]: https://linkerd.io
 [Emissary-ingress]: https://www.getambassador.io/docs/emissary/
-[DEMO.md]: DEMO.md
+[LINKERD_DEMO.md]: LINKERD_DEMO.md
 [demosh]: https://github.com/BuoyantIO/demosh
 [Polaris]: https://polaris.docs.fairwinds.com
 [cert-manager]: https://cert-manager.io
