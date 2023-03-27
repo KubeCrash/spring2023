@@ -33,4 +33,4 @@ metadata:
 spec:
   hostname: "*"
   tlsSecret:
-    name: emissary-certs
+    name: faces-demo-cert

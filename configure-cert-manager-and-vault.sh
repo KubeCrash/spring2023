@@ -31,8 +31,13 @@ vault write pki/root/generate/internal \
 vault write pki/config/urls \
     issuing_certificates="https://vault.vault.svc.cluster.local:8200/v1/pki/ca" \
     crl_distribution_points="https://vault.vault.svc.cluster.local:8200/v1/pki/crl"
+
+ALLOWED_DOMAIN=$(echo "$DEMO_HOST" | awk ' BEGIN { FS="." } ; { print $(NF-1) "." $NF }')
+
+echo "ALLOWED_DOMAIN: $ALLOWED_DOMAIN"
+
 vault write pki/roles/cluster-local \
-    allowed_domains=cluster.local \
+    allowed_domains="$ALLOWED_DOMAIN" \
     allow_subdomains=true \
     max_ttl=72h
 

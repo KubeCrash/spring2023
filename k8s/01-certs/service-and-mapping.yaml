@@ -1,0 +1,27 @@
+# Service and Mapping to allow Let's Encrypt requests to reach cert-manager
+# solver pods. This method requires that Emissary has a Host for this domain
+# and that the domain points to Emissary's public IP address.
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: acme-challenge-service
+ namespace: emissary
+spec:
+ ports:
+   - port: 80
+     targetPort: 8089
+ selector:
+   acme.cert-manager.io/http01-solver: 'true'
+---
+apiVersion: getambassador.io/v3alpha1
+kind: Mapping
+metadata:
+ name: acme-challenge-mapping
+ namespace: emissary
+spec:
+ hostname: '*'
+ prefix: /.well-known/acme-challenge/
+ rewrite: ''
+ service: acme-challenge-service
+ bypass_auth: true
