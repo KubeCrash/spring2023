@@ -32,7 +32,8 @@ spec:
     spec:
       containers:
         - name: example-auth
-          image: thedevelopnik/ambassador-auth-service:1.1.1
+          # image: thedevelopnik/ambassador-auth-service:1.1.1
+          image: alicewasko/ambassador-auth:0.1
           imagePullPolicy: Always
           ports:
             - name: http-api

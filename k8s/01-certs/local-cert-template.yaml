@@ -9,6 +9,6 @@ spec:
   issuerRef:
     name: vault-apps-clusterissuer
     kind: ClusterIssuer
-  commonName: 'demo.cluster.local'
+  commonName: 'demo.127-0-0-1.sslip.io'
   dnsNames:
-  - 'demo.cluster.local'
+  - 'demo.127-0-0-1.sslip.io'

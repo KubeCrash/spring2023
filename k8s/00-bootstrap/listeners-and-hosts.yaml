@@ -31,6 +31,6 @@ metadata:
   name: wildcard-host
   namespace: emissary
 spec:
-  hostname: "demo.cluster.local"
+  hostname: "*"
   tlsSecret:
-    name: emissary-certs
+    name: faces-demo-cert

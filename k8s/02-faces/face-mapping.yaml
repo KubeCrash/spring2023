@@ -5,10 +5,7 @@ metadata:
   name: face-mapping
   namespace: faces
 spec:
-  hostname: "demo.cluster.local"
+  hostname: "*"
   prefix: /face/
   service: face.faces
-  timeout_ms: 250
-  retry_policy:
-    retry_on: 5xx
-    num_retries: 1
+  timeout_ms: 0
