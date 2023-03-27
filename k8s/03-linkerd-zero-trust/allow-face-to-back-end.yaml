@@ -1,0 +1,24 @@
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-face-to-back-end
+  namespace: faces
+spec:
+  targetRef:
+    group: policy.linkerd.io
+    kind: Server
+    name: faces-back-end
+  requiredAuthenticationRefs:
+    - group: policy.linkerd.io
+      kind: MeshTLSAuthentication
+      name: face-workload
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: MeshTLSAuthentication
+metadata:
+  name: face-workload
+  namespace: faces
+spec:
+  identities:
+    - "face.faces.serviceaccount.identity.linkerd.cluster.local"
