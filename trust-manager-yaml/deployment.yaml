@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-public-endpoint
+  namespace: faces
+spec:
+  selector:
+    matchLabels:
+      app: test-public-endpoint
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: test-public-endpoint
+    spec:
+      volumes:
+      - name: configmap-ca-volume
+        configMap:
+          name: public-ca-bundle
+          optional: false
+      containers:
+      - name: test-public-endpoint
+        image: curlimages/curl:latest
+        # every 15 seconds, we fetch the public URL and verify that TLS is working as expected
+        command: ["/bin/sh", "-c"]
+        args:
+          - while sleep 15; do curl --cacert /cacert.pem https://kubecrash.demo.59s.io/faces/; done
+        volumeMounts:
+        - name: configmap-ca-volume
+          mountPath: "/cacert.pem" # this is the cacert location that CURL uses in this image
+          subPath: "cacert.pem"
+          readOnly: true
