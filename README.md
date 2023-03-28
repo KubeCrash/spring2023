@@ -32,7 +32,7 @@ need:
 - a cluster that supports globally-routable Services of type `LoadBalancer`
   (which almost always means a cluster from a cloud provider); and
 
-- a DNS A record configured to point to the globally-routable IP address of
+- a DNS `A` record configured to point to the globally-routable IP address of
   the `emissary-ingress` Service in the `emissary` namespace.
 
 There's a bit of a chicken-and-egg problem here: you have to partially deploy
@@ -41,7 +41,7 @@ split into several steps.
 
 ### Using a Globally-Routable Cluster
 
-Start by exporting `$DEMO_HOST`, `$DEMO_EMAIL`, and '$DEMO_CERT`:
+Start by exporting `$DEMO_HOST`, `$DEMO_EMAIL`, and `$DEMO_CERT`:
 
 - `$DEMO_HOST` must be the hostname you'll use for your Emissary-ingress
   LoadBalancer (you can choose the name before knowing the IP address, it's
