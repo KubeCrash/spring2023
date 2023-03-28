@@ -11,6 +11,12 @@ helm upgrade cert-manager jetstack/cert-manager \
 
 kubectl apply --server-side -f ./vault-server-tls.yaml
 
+# Install trust-manager
+helm upgrade trust-manager jetstack/trust-manager \
+  --install \
+  --namespace cert-manager \
+  --wait
+
 # Install Vault
 helm repo add hashicorp https://helm.releases.hashicorp.com
 helm upgrade vault hashicorp/vault \
