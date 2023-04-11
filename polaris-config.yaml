@@ -1,0 +1,104 @@
+config:
+  checks:
+    linkerdSidecarInjected: warning # or danger/ignore
+    defaultPolicyAttached: warning
+    missingServer: warning
+
+  customchecks:
+    linkerdSidecarInjected:
+      successMessage: Linkered sidecar has been injected
+      failureMessage: Linkerd sidecar should be injected to enable mTLS
+      category: Security
+      target: PodTemplate
+      schema:
+        '$schema': http://json-schema.org/draft-07/schema
+        type: object
+        properties:
+          metadata:
+            type: object
+            required:
+              - annotations
+            properties:
+              annotations:
+                type: object
+                properties:
+                  'linkerd.io/inject':
+                    type: string
+                    const: "enabled"
+                required:
+                  - linkerd.io/inject
+
+
+    defaultPolicyAttached:
+      successMessage: Workload does not have override of default cluster policy
+      failureMessage: Workload has override of default cluster policy
+      category: Security
+      target: PodTemplate
+      schema:
+        '$schema': http://json-schema.org/draft-07/schema
+        type: object
+        properties:
+          metadata:
+            type: object
+            properties:
+              annotations:
+                type: object
+                properties:
+                  "config.linkerd.io/default-inbound-policy":
+                    not: {}
+        required:
+          - metadata
+
+    missingServer:
+      successMessage: A Server is attached to this pod
+      failureMessage: A Server should be attached to this pod
+      category: Security
+      target: PodSpec
+      schema:
+        '$schema': http://json-schema.org/draft-07/schema
+        type: object
+        properties:
+          metadata:
+            type: object
+            properties:
+              labels:
+                type: object
+                minProperties: 1
+      additionalSchemaStrings:
+        policy.linkerd.io/Server: |
+          type: object
+          properties:
+            spec:
+              type: object
+              required: ["selector"]
+              properties:
+                podSelector:
+                  type: object
+                  required: ["matchLabels"]
+                  properties:
+                    matchLabels:
+                      type: object
+                      anyOf:
+                      {{ range $key, $value := .metadata.labels }}
+                      - properties:
+                          "{{ $key }}":
+                            type: string
+                            const: {{ $value }}
+                        required: ["{{ $key }}"]
+                      {{ end }}
+
+
+  exemptions:
+    - namespace: kube-system
+    - namespace: local-path-storage
+    - namespace: default
+    - namespace: kube-public
+    - namespace: kube-node-lease
+    - namespace: vault
+    - namespace: cert-manager
+    - namespace: linkerd
+    - namespace: grafana
+    - namespace: linkerd-viz
+    - namespace: emissary
+    - namespace: emissary-system
+
